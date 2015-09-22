@@ -68,7 +68,7 @@ def install_packages():
     """
     hookenv.log('Installing Debian packages')
     # Create the list of packages to install.
-    apt_packages = ['build-essential', 'git', 'make', 'nginx', 'python-pip']
+    apt_packages = ['build-essential', 'git', 'make', 'nginx', 'python-pip', 'docker.io']
     fetch.apt_install(fetch.filter_installed_packages(apt_packages))
 
 
