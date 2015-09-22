@@ -1,0 +1,139 @@
+# To deploy the demo do:
+#
+# $ git clone https://github.com/frobware/vas-charms-dev.git
+# $ cd vas-charms-dev/charms
+# $ juju-deployer -v -B -c ../bundle-lp1491592.yaml
+
+# 2015-09-22 16:32:17 Using runtime GoEnvironment on local
+# 2015-09-22 16:32:17 Using deployment demo
+# 2015-09-22 16:32:17 Starting deployment of demo
+# 2015-09-22 16:32:17 Getting charms...
+# 2015-09-22 16:32:17 Cache dir /home/aim/.juju/.deployer-store-cache/cs_~kubernetes_trusty_kubernetes-6
+# 2015-09-22 16:32:17 Service: kubernetes-master has neither charm url or branch specified
+# 2015-09-22 16:32:17 Service: flannel-docker-charm has neither charm url or branch specified
+# 2015-09-22 16:32:17 Service: docker-charm has neither charm url or branch specified
+# 2015-09-22 16:32:17 Cache dir /home/aim/.juju/.deployer-store-cache/cs_trusty_etcd-0
+# 2015-09-22 16:32:17 Resolving configuration
+# 2015-09-22 16:32:17 Service: kubernetes-master has neither charm url or branch specified
+# 2015-09-22 16:32:17 Service: docker-charm has neither charm url or branch specified
+# 2015-09-22 16:32:17 bootstrapping, this might take a while...
+# 2015-09-22 16:32:53  Bootstrap complete
+# 2015-09-22 16:32:53 Connecting to environment...
+# 2015-09-22 16:32:53 Connected to environment
+# 2015-09-22 16:32:53 Deploying services...
+# 2015-09-22 16:32:53 <deployer.env.go.GoEnvironment object at 0x7f4cf032f590>
+# 2015-09-22 16:32:53 Service: docker-charm has neither charm url or branch specified
+# 2015-09-22 16:32:53  Deploying service docker using local:trusty/docker
+# 2015-09-22 16:32:58  Deploying service etcd using cs:trusty/etcd-0
+# 2015-09-22 16:33:04 Service: flannel-docker-charm has neither charm url or branch specified
+# 2015-09-22 16:33:04  Deploying service flannel-docker using local:trusty/flannel-docker
+# 2015-09-22 16:33:08  Deploying service kubernetes using cs:~kubernetes/trusty/kubernetes-6
+# 2015-09-22 16:33:10 Service: kubernetes-master has neither charm url or branch specified
+# 2015-09-22 16:33:10  Deploying service kubernetes-master using local:trusty/kubernetes-master
+# 2015-09-22 16:33:20 Adding units...
+# 2015-09-22 16:33:21  Service 'docker' does not need any more units added.
+# 2015-09-22 16:33:21  Service 'etcd' does not need any more units added.
+# 2015-09-22 16:34:22 Service: flannel-docker-charm has neither charm url or branch specified
+# 2015-09-22 16:34:22 Config specifies num units for subordinate: flannel-docker
+# 2015-09-22 16:35:23 Config specifies num units for subordinate: kubernetes
+# 2015-09-22 16:35:23  Service 'kubernetes-master' does not need any more units added.
+# 2015-09-22 16:35:23 Waiting for units before adding relations
+# 2015-09-22 16:39:15 Connecting to environment...
+# 2015-09-22 16:39:15 Connected to environment
+# 2015-09-22 16:39:15 Adding relations...
+# 2015-09-22 16:39:15  Adding relation flannel-docker:network <-> docker:network
+# 2015-09-22 16:39:16  Adding relation flannel-docker:docker-host <-> docker:juju-info
+# 2015-09-22 16:39:16  Adding relation flannel-docker:db <-> etcd:client
+# 2015-09-22 16:39:16  Adding relation kubernetes:docker-host <-> docker:juju-info
+# 2015-09-22 16:39:17  Adding relation etcd:client <-> kubernetes:etcd
+# 2015-09-22 16:39:17  Adding relation etcd:client <-> kubernetes-master:etcd
+# 2015-09-22 16:39:17  Adding relation kubernetes-master:minions-api <-> kubernetes:api
+# 2015-09-22 16:39:18 Waiting for relation convergence 60s
+# 2015-09-22 16:40:18  Exposing service 'kubernetes-master'
+# 2015-09-22 16:40:18 Deployment complete in 481.28 seconds
+
+# Juju Environment:
+#
+# local:
+#     type: local
+#     container: kvm
+#     # root-dir holds the directory that is used for the storage files and
+#     # database. The default location is $JUJU_HOME/<env-name>.
+#     # $JUJU_HOME defaults to ~/.juju. Override if needed.
+#     #
+#     # root-dir: ~/.juju/local
+
+#     # storage-port holds the port where the local provider starts the
+#     # HTTP file server. Override the value if you have multiple local
+#     # providers, or if the default port is used by another program.
+#     #
+#     # storage-port: 8040
+
+#     # network-bridge holds the name of the LXC network bridge to use.
+#     # Override if the default LXC network bridge is different.
+#     #
+#     #
+#     # network-bridge: lxcbr0
+
+#     # The default series to deploy the state-server and charms on.
+#     # Make sure to uncomment the following option and set the value to
+#     # precise or trusty as desired.
+#     #
+#     # default-series: trusty
+
+#     # Whether or not to refresh the list of available updates for an
+#     # OS. The default option of true is recommended for use in
+#     # production systems, but disabling this can speed up local
+#     # deployments for development or testing.
+#     #
+#     enable-os-refresh-update: false
+
+#     # Whether or not to perform OS upgrades when machines are
+#     # provisioned. The default option of true is recommended for use
+#     # in production systems, but disabling this can speed up local
+#     # deployments for development or testing.
+#     #
+#     enable-os-upgrade: false
+
+demo:
+  series: trusty
+  services:
+    kubernetes-master:
+      charm: local:trusty/kubernetes-master
+# charm: cs:~kubernetes/trusty/kubernetes-master-7
+      expose: true
+      options:
+        version: "v1.0.3"
+      constraints: "mem=2G"
+    docker:
+# charm: cs:~kubernetes/trusty/docker-0
+      charm: local:trusty/docker-charm
+      num_units: 1
+      options:
+        latest: true
+        # version: "1.6.2"
+        # aufs: true
+    flannel-docker:
+# charm: cs:~kubernetes/trusty/flannel-docker-2
+      charm: local:trusty/flannel-docker-charm
+    kubernetes:
+      charm: cs:~kubernetes/trusty/kubernetes-6
+    etcd:
+      charm: cs:trusty/etcd-0
+  relations:
+# --- Kubernetes ---
+  - - flannel-docker:network
+    - docker:network
+  - - flannel-docker:docker-host
+    - docker:juju-info
+  - - flannel-docker:db
+    - etcd:client
+  - - kubernetes:docker-host
+    - docker:juju-info
+  - - etcd:client
+    - kubernetes:etcd
+  - - etcd:client
+    - kubernetes-master:etcd
+  - - kubernetes-master:minions-api
+    - kubernetes:api
+# --- ---
